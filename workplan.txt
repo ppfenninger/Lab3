@@ -1,0 +1,26 @@
+Assigned: October 19
+Midpoint Check-in: Block Diagram Review - October 26th
+Due: November 2
+
+
+Collect and make nicer test files for existing modules (~3 hours) (10/26)
+  ALU (~1 hour)
+    Cleaning up code and test bench
+  Register File (~1 hour)
+    Cleaning up code and test bench
+   Data memory (~1 hour)
+    Cleaning up code and test bench
+Make control logic on paper/whiteboard (~2 hours in a meeting) (10/26)
+  This is where we will research and design our CPU (down to the basic building blocks that we already have created)
+  Need to write controls for: ALU, Register File, Program Counter
+  “Test” for all instructions
+  Qualitatively make sure they work by comparing to diagram
+  Review with teaching team after it’s done 
+Port from whiteboard to verilog (~3.5 - 8 hours) - Programming in verilog from whiteboard drawing (10/29)
+  Writing controls for the components above and connect them (~1 hour, if we did our diagram good, up to 4 hours if we did it bad)
+  Write additional tests as needed (~1.5 hours)
+  Write test benches for final CPU in verilog (maybe, depending on how assembly testing works)
+  Debug as needed (~2 hours)
+Write assembly tests (~1.5 hours) - Writing tests in assembly that will stress all of the commands we need to implement (10/29)
+Run assembly tests and debug (~0.5 hours or ~4 hours depending on how well we made the CPU the first time) - Run all assembly tests to make sure that our CPU works properly (11/1)
+Write report (~3 hours) (11/2)
