@@ -8,6 +8,7 @@
 //   2 asynchronous read ports
 //   1 synchronous, positive edge triggered write port
 //------------------------------------------------------------------------------
+`timescale 1 ns / 1 ps
 
 module regfile
 (
@@ -17,13 +18,13 @@ input[31:0]	WriteData,	// Contents to write to register
 input[4:0]	ReadRegister1,	// Address of first register to read
 input[4:0]	ReadRegister2,	// Address of second register to read
 input[4:0]	WriteRegister,	// Address of register to write
-input		RegWrite,	// Enable writing of register when High
+input		wEnable,	// Enable writing of register when High
 input		Clk		// Clock (Positive Edge Triggered)
 );
 	wire[31:0] decoder_out;
 	wire[31:0] reg_out[31:0];
 
-	decoder1to32 decoder(.out(decoder_out),.enable(RegWrite),.address(WriteRegister));
+	decoder1to32 decoder(.out(decoder_out),.enable(wEnable),.address(WriteRegister));
 
 	register32zero reg0(.d(WriteData),.q(reg_out[0]),.wrenable(decoder_out[0]),.clk(Clk));
 

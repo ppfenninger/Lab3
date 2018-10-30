@@ -1,4 +1,4 @@
-module FullAdder
+module FullAdder1
 (
     output res, 
     output carryout,
@@ -16,7 +16,7 @@ module FullAdder
     or   orgate(carryout, AandB, xAorBandCin);
 endmodule
 
-module didOverflow
+module didOverflow1
 (
     output overflow,
     input a, 
@@ -63,7 +63,7 @@ module Adder
         genvar i;
         for (i=0; i<32; i=i+1)
         begin
-            FullAdder FullAdder (
+            FullAdder1 FullAdder (
                 .carryout (carryOut[i+1]),
                 .a (operandA[i]),
                 .b (operandB[i]),
@@ -73,7 +73,7 @@ module Adder
         end
     endgenerate
 
-    didOverflow overflowCalc( // looks at most significant bit and checks if it will overflow
+    didOverflow1 overflowCalc( // looks at most significant bit and checks if it will overflow
         .overflow (overflow),
         .a (operandA[31]),
         .b (operandB[31]),

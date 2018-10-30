@@ -112,29 +112,6 @@ not notOut(out, outInv);
 
 endmodule // isZero
 
-module SLTValue (
-	input[31:0] initialResult,
-	input overflow, 
-	output[31:0] res
-);
-	//SLT Module for . Uses outputs of subtractor
-    wire overflowInv;
-    wire SLTval;
-
-    not overflowNot(overflowInv, overflow);
-    and sltAnd(SLTval, initialResult[31], overflowInv);
-
-    generate
-        genvar j;
-        for (j=1; j<32; j=j+1)
-        begin
-            and andZero(res[j], overflowInv, overflow); //just need to set all of the bits to zero
-        end
-    endgenerate
-
-    or orSLT(res[0], SLTval, SLTval); //need to set the first bit to the SLTvalue
-endmodule
-
 module didOverflow // calculates overflow of 2 bits
 (
     output overflow,
@@ -178,10 +155,10 @@ module ALU(
 	wire[31:0] sltResult;
 	wire[31:0] sltFinal;
 	reg isSLT;
-	wire[31:0] isSubtract;
+	wire isSubtract;
 	wire[32:0] carryOut;
 
-	or carryOr(carryOut[0], isSubtract[0], isSubtract[0]);
+	or carryOr(carryOut[0], isSubtract, isSubtract);
 	
 	generate
         genvar i;
@@ -194,14 +171,10 @@ module ALU(
                 .a (operandA[i]),
                 .b (operandB[i]),
                 .carryIn (carryOut[i]),
-                .isSubtract (isSubtract[i]),
+                .isSubtract (isSubtract),
                 .opcode (opcode),
                 .funct (funct)
             );
-
-            and andInitial(initialFinal[i], initialResult[i], isInitial);
-            and andSLT(sltFinal[i], sltResult[i], isSLT);
-            or orRes(res[i], initialFinal[i], sltFinal[i]);
         end
     endgenerate
 
@@ -226,24 +199,35 @@ module ALU(
 				endcase
 			end
 
-			default: $display("Error in ALUBitSli: Invalid opcode");
-
-
+			default: $display("Error in ALU: Invalid opcode");
 		endcase
 	end
+
+	//SLT Module for . Uses outputs of subtractor
+    wire overflowInv;
+    wire isSLTinv;
+    wire SLTval;
+
+    not(overflowInv, overflow);
+    not(isSLTinv, isSLT);
+    and(SLTval, initialResult[31], overflowInv, isSLT);
+
+    generate
+        genvar j;
+        for (j=0; j<32; j=j+1)
+        begin
+            and(res[j], initialResult[j], isSLTinv);
+        end
+    endgenerate
+
+    or(res[0], initialResult[0], SLTval);
 
 	didOverflow overflowCalc (
 		.overflow (overflow),
 		.a (operandA[31]),
 		.b (operandB[31]),
-		.s (res[31]),
-		.sub (isSubtract[0])
-	);
-
-	SLTValue sltCalc (
-		.initialResult (initialResult),
-		.overflow (overflow),
-		.res (sltResult)
+		.s (initialResult[31]),
+		.sub (isSubtract)
 	);
 
 	isZero zeroCalc(

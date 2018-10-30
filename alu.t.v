@@ -140,11 +140,8 @@ module testALU();
     	if (res != 32'd0) $display("p not < 0 TEST FAILED - res: %b", res);
     	operandA=32'd0;operandB=32'd3657483652; #4000
     	if (res != 32'd0) $display("0 not < n TEST FAILED - res: %b", res);
-        $display("test1.3");
-    	operandA=32'd3657483652;operandB=32'd0;
-        $display("test1.4");
-    	if (res != 32'd1) $display("n < 0 TEST FAILED");
-        $display("test2");
+    	operandA=32'd3657483652;operandB=32'd0; #4000
+    	if (res != 32'd1) $display("n < 0 TEST FAILED - res: %b %b", res, overflow);
     	operandA=32'd1000;operandB=32'd2000; #4000
     	if (res != 32'd1) $display("p < p TEST FAILED");
     	operandA=32'd2000;operandB=32'd1000; #4000
@@ -153,13 +150,12 @@ module testALU();
     	if (res != 32'd1) $display("n < n TEST FAILED");
     	operandA=32'd3657483652;operandB=32'd2360000008; #4000
     	if (res != 32'd0) $display("n not < n TEST FAILED %b", res);
-    	operandA=32'd3657483652;operandB=32'd1000; #4000
-    	if (res != 32'd1) $display("n < p TEST FAILED");
+    	operandA=32'd3657483652;operandB=32'd1000; #10000
+    	if (res != 32'd1) $display("n < p TEST FAILED - res: %b, %b", res, overflow);
     	if(zero != 0) $display("ZERO FAILED - was not 1");
     	operandA=32'd1000;operandB=32'd3657483652; #4000
     	if (res != 32'd0) $display("p not < n TEST FAILED");
     	if(zero != 32'd1) $display("ZERO FAILED - was 0 %b   %b ", zero, res);
-        $display("test3");
 
         $display("Testing Finished");
 	end
