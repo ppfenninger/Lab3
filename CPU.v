@@ -31,13 +31,14 @@ wire[31:0] finalJumpValue;
 assign jump = instruction[25:0];
 assign finalJumpValue = {pcPlusFour[31:28], jump, 2'b0};
 
-wire isJumpSel;
+wire isJumpSelInv, isJumpSel;
 not(opcode5Inv, opcode[5]);
-or(isJumpSel, opcode5Inv, opcode4Inv, opcode3Inv, opcode2Inv, opcode[1]);
+or(isJumpSelInv, opcode5Inv, opcode4Inv, opcode3Inv, opcode2Inv, opcode[1]);
+not(isJumpSel, isJumpSelInv);
 wire[31:0] jumpNextPC;
 mux isJumpMux(
-	.input1(pcAfterAdd),
-	.input0(finalJumpValue),
+	.input0(pcAfterAdd),
+	.input1(finalJumpValue),
 	.out(jumpNextPC),
 	.sel(isJumpSel)
 );
