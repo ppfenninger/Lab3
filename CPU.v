@@ -7,14 +7,11 @@
 `include "signExtender.v"
 
 module CPU (
-	input clk,    // Clock
-	input instructionWriteEnable,
-	input instructionInput,
-	input instructionInputAddress,
+	input clk,
 	input reset
 );
 //wire declaration
-wire[31:0] pcAfterAdd, pcPlusFour, Da, immediate, RegWrite;
+wire[31:0] pcAfterAdd, pcPlusFour, Da, immediate;
 wire opcode2Inv, opcode3Inv, opcode4Inv, opcode5Inv;
 
 wire isBranch, isBneOrBeq, zero, wEnable;
@@ -135,7 +132,7 @@ and(isJumpandLink, opcode[0], opcode[1], opcode2Inv, opcode3Inv, opcode4Inv);
 mux #(5) writeRegister31Mux(
 	.input0(regWriteRdOrRt),
 	.input1(5'd31),
-	.out(RegWrite),
+	.out(regWrite),
 	.sel(isJumpandLink)
 );
 
