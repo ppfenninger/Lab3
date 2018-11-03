@@ -29,7 +29,7 @@ module hw4testbenchharness();
     .ReadRegister1(ReadRegister1),
     .ReadRegister2(ReadRegister2),
     .WriteRegister(WriteRegister),
-    .RegWrite(RegWrite),
+    .wEnable(RegWrite),
     .Clk(Clk)
   );
 

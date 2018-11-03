@@ -151,9 +151,7 @@ input       clk
 );
 integer i;
 	always @(posedge clk) begin
-		if(wrenable) begin
-			q[31:0] <= 32'h00000000;
-		end // if(wrenable)
+		q[31:0] <= 32'h00000000;
 	end // always @(posedge clk)
 endmodule
 

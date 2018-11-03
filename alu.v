@@ -66,7 +66,7 @@ reg isXor;
 					default: $display("Error in ALUBitSlice: Invalid funct");
 				endcase
 			end
-			default: $display("Error in ALU: Invalid opcode");
+			default: $display("Error in ALU: Invalid opcode. OPCODE: %b", opcode);
 		endcase
 	end
 
@@ -195,7 +195,7 @@ module ALU(
 					`ADD_FUNCT: begin isInitial=1; isSLT=0; end //ADD
 					`SUB_FUNCT: begin isInitial=1; isSLT=0; end //SUB
 					`SLT_FUNCT: begin isInitial=0; isSLT=1; end //SLT
-					default: $display("Error in ALU: Invalid funct");
+					default: $display("Error in ALU: Invalid funct. OPCODE: %b", opcode);
 				endcase
 			end
 

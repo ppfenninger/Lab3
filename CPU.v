@@ -29,25 +29,25 @@ end
 wire[25:0] jump;
 wire[31:0] finalJumpValue;
 assign jump = instruction[25:0];
-assign finalJumpValue = {programCounter[31:26], jump};
+assign finalJumpValue = {pcPlusFour[31:28], jump, 2'b0};
 
 wire isJumpSel;
 not(opcode5Inv, opcode[5]);
 or(isJumpSel, opcode5Inv, opcode4Inv, opcode3Inv, opcode2Inv, opcode[1]);
 wire[31:0] jumpNextPC;
 mux isJumpMux(
-	.input0(pcAfterAdd),
-	.input1(finalJumpValue),
+	.input1(pcAfterAdd),
+	.input0(finalJumpValue),
 	.out(jumpNextPC),
 	.sel(isJumpSel)
 );
 
 wire jrOr, jrNor;
-or(jrOr, opcode[0], opcode[1], opcode[2], opcode[3], opcode[4], opcode[5], funct[0]); // if all of these are zero then its JR
+or(jrOr, opcode[0], opcode[1], opcode[2], opcode[3], opcode[4], opcode[5], funct[5]); // if all of these are zero then its JR
 not(jrNor, jrOr);
 mux isNotJRMux(
-	.input0(Da), //R[rs]
-	.input1(jumpNextPC),
+	.input1(Da), //R[rs]
+	.input0(jumpNextPC),
 	.out(nextProgramCounter),
 	.sel(jrNor)
 );
@@ -64,7 +64,7 @@ Adder programCounterAdder(
 wire isBranchOrAddSel;
 mux isBranchOrAddMux(
 	.input1(immediate), // has already been extended
-	.input0(32'd4),
+	.input0(32'd1),
 	.out(fourOrBranch),
 	.sel(isBranchOrAddSel)
 );
@@ -192,8 +192,8 @@ wire[31:0] aluOrDout;
 and(isAluOrDout, opcode[5], opcode3Inv);
 
 mux isAluOrDoutMux(
-	.input0(dataOut),
-	.input1(aluResult),
+	.input1(dataOut),
+	.input0(aluResult),
 	.out(aluOrDout),
 	.sel(isAluOrDout)
 );
@@ -207,7 +207,7 @@ mux isJalAluOrDoutMux(
 
 Adder pcPlusFourAdder(
 	.operandA(programCounter),
-	.operandB(32'd4),
+	.operandB(32'd1),
 	.result(pcPlusFour),
 	.carryout(),
 	.overflow()

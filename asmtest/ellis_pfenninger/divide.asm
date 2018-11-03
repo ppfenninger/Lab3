@@ -3,7 +3,7 @@
 # Stores quotient in $v0, remainder in $v1
 
 # Initialize values with functions we have implemented
-addi $a0 $zero 5555
+addi $a0 $zero 5
 addi $a1 $zero 5
 
 jal divide
