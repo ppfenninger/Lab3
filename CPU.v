@@ -63,8 +63,8 @@ Adder programCounterAdder(
 
 wire isBranchOrAddSel;
 mux isBranchOrAddMux(
-	.input0(immediate), // has already been extended
-	.input1(32'd4),
+	.input1(immediate), // has already been extended
+	.input0(32'd4),
 	.out(fourOrBranch),
 	.sel(isBranchOrAddSel)
 );
@@ -180,7 +180,7 @@ memoryReg memory(
 	.dataOutRead(instruction),
 	.addressRW(aluResult),
 	.addressRead(programCounter),
-	.addressWrite(9'b0),
+	.addressWrite(9'b0), //Don't actually need the second write port
 	.writeEnableRW(dataWrite),
 	.writeEnableWrite(1'b0),
 	.dataInRW(Db),
