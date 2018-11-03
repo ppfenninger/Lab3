@@ -1,4 +1,4 @@
-`include "fake_cpu.v"
+`include "CPU.v"
 
 //------------------------------------------------------------------------
 // Simple fake CPU testbench sequence
@@ -14,7 +14,7 @@ module cpu_test ();
     always #10 clk = !clk;
 
     // Instantiate fake CPU
-    fake_cpu cpu(.clk(clk), .reset(reset));
+    CPU cpu(.clk(clk), .reset(reset));
 
     // Filenames for memory images and VCD dump file
     reg [1023:0] mem_text_fn;
@@ -47,9 +47,9 @@ module cpu_test ();
         // Assumes compact memory map, _word_ addressed memory implementation
         //   -> .text segment starts at word address 0
         //   -> .data segment starts at word address 2048 (byte address 0x2000)
-	$readmemh(mem_text_fn, cpu.memory, 0);
+	$readmemh(mem_text_fn, cpu.memory.memory, 0);
         if (init_data) begin
-	    $readmemh(mem_data_fn, cpu.memory, 2048);
+	    $readmemh(mem_data_fn, cpu.memory.memory, 2048);
         end
 	
 	// Dump waveforms to file
@@ -68,7 +68,7 @@ module cpu_test ();
 	// automatically report the results.
 	$display("Time | PC       | Instruction");
 	repeat(3) begin
-        $display("%4t | %h | %h", $time, cpu.PC_A, cpu.INS_A); #20 ;
+        $display("%4t | %h | %h", $time, cpu.programCounter, cpu.instruction); #20 ;
         end
 	$display("... more execution (see waveform)");
     
