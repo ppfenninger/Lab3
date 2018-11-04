@@ -10,15 +10,23 @@ module CPU (
 	input clk,    // Clock
 	input instructionWriteEnable,
 	input instructionInput,
-	input instructionInputAddress
+	input instructionInputAddress,
+	input reset
 );
+//wire declaration
+wire[31:0] pcAfterAdd, pcPlusFour, Da, immediate, RegWrite;
+wire opcode2Inv, opcode3Inv, opcode4Inv, opcode5Inv;
+
+wire isBranch, isBneOrBeq, zero, wEnable;
+
 //Program Counter Logic
 reg[31:0] programCounter;
 wire [31:0] instruction, nextProgramCounter;
 
 //advances the program to the next step
 always @(posedge clk) begin
-	programCounter <= nextProgramCounter;
+	if (reset) programCounter <= 32'b0;
+	else programCounter <= nextProgramCounter;
 end
 
 wire[25:0] jump;
@@ -27,7 +35,6 @@ assign jump = instruction[25:0];
 assign finalJumpValue = {programCounter[31:26], jump};
 
 wire isJumpSel;
-wire opcode5Inv;
 not(opcode5Inv, opcode[5]);
 or(isJumpSel, opcode5Inv, opcode4Inv, opcode3Inv, opcode2Inv, opcode[1]);
 wire[31:0] jumpNextPC;
@@ -176,11 +183,11 @@ memoryReg memory(
 	.dataOutRead(instruction),
 	.addressRW(aluResult),
 	.addressRead(programCounter),
-	.addressWrite(instructionInputAddress),
+	.addressWrite(9'b0),
 	.writeEnableRW(dataWrite),
-	.writeEnableWrite(instructionWriteEnable),
+	.writeEnableWrite(1'b0),
 	.dataInRW(Db),
-	.dataInWrite(instructionInput)
+	.dataInWrite(32'b0)
 );
 
 wire isAluOrDout;

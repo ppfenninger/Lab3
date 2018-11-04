@@ -16,11 +16,9 @@ module testMux();
 		.out(out));
 
 initial begin
-	$dumpfile("mux.vcd");
-	$dumpvars();
 
-	a = {`HALFWIDTH'b1, `HALFWIDTH'b0};
-	b = {`HALFWIDTH'b0, `HALFWIDTH'b1};;
+	a = {`HALFWIDTH'b1111, `HALFWIDTH'b0};
+	b = {`HALFWIDTH'b0, `HALFWIDTH'b1111};;
 	select = 0;
 	#`DELAY;
 	if(out !== a)

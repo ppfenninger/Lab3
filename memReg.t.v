@@ -14,42 +14,42 @@ module testmemReg ();
 
 	$display("Writing to two memory addresses");
 	writeEnable2 = 0;
-	address2 = 0000000;
+	address2 = 9'b0000000;
 	dataIn2 = 31'b0;
 
 	writeEnable1=1;
-	address1=1111111;
+	address1=9'b1111111;
 	dataIn1=32'b11110000;
 	clk=0; #10
 	clk=1; #10 //address1 1111111 should be written to
-	address1=0000000;
+	address1=9'b0000000;
 	dataIn1=32'b00001111;
 	clk=0; #10
 	clk=1; #10 //address1 0000000 should now be written to
 
-	$display("Reading from the two memory address1es"); //should not depend on the clock
+	$display("Reading from the two memory addresses"); //should not depend on the clock
 	writeEnable1=0;
-	address1=1111111; #10
+	address1=9'b1111111; #10
 	if (dataOut1 !== 32'b11110000) $display("Read test 1 failed - %b", dataOut1);
-	address1=0000000; #10
+	address1=9'b0000000; #10
 	if (dataOut1 !== 32'b00001111) $display("Read test 2 failed - %b", dataOut1);
 
 	$display("Writing to two memory address1es - with write disabled");
 	writeEnable1=0;
-	address1=1111111;
+	address1=9'b1111111;
 	dataIn1=32'b00001111;
 	clk=0; #10
 	clk=1; #10 //address1 1111111 should be written to
-	address1=0000000;
+	address1=9'b0000000;
 	dataIn1=32'b11110000;
 	clk=0; #10
 	clk=1; #10 //address1 0000000 should now be written to
 
 	$display("Reading from the two memory address1es - make sure they didn't change"); //should not depend on the clock
 	writeEnable1=0;
-	address1=1111111; #10
+	address1=9'b1111111; #10
 	if (dataOut1 !== 32'b11110000) $display("Read test 1 failed - %b", dataOut1);
-	address1=0000000; #10
+	address1=9'b0000000; #10
 	if (dataOut1 !== 32'b00001111) $display("Read test 2 failed - %b", dataOut1);
 
 
@@ -58,16 +58,16 @@ module testmemReg ();
 	writeEnable2 = 1;
 	dataIn1 = 32'b1;
 	dataIn2 = 32'b10;
-	address1 = 1100000;
-	address2 = 0011111;
+	address1 = 9'b1100000;
+	address2 = 9'b0011111;
 	clk = 0; #10
 	clk = 1; #10 //register should now be written to
 
 	$display("Reading from two memory addresses at the same time");
 	writeEnable1 = 0;
 	writeEnable2 = 0;
-	address1 = 0011111;
-	address2 = 1100000; #10
+	address1 = 9'b0011111;
+	address2 = 9'b1100000; #10
 	if (dataOut1 !== 32'b10) $display("Read from two at once test 1 failed - %b", dataOut1);
 	if (dataOut2 !== 32'b1) $display("Read from two at once test 2 failed - %b", dataOut2);
 
