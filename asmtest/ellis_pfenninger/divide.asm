@@ -3,14 +3,14 @@
 # Stores quotient in $v0, remainder in $v1
 
 # Initialize values with functions we have implemented
-addi $a0 $zero 5
+addi $a0 $zero 52
 addi $a1 $zero 5
 
 jal divide
 j end
 
 divide:
-# Check that $a0 is less than $a1
+# Check that $a0 isn't less than $a1
 slt $t2 $a0 $a1
 bne $t2 $zero except_end
 
