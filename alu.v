@@ -48,8 +48,8 @@ reg isXor;
 
 	always @(opcode or funct) begin
 		case (opcode)
-			`LW_OP:   begin isA=1; isAdd=0; isXor=0; isSubtract=0; end
-			`SW_OP:   begin isA=1; isAdd=0; isXor=0; isSubtract=0; end //SW
+			`LW_OP:   begin isA=0; isAdd=1; isXor=0; isSubtract=0; end
+			`SW_OP:   begin isA=0; isAdd=1; isXor=0; isSubtract=0; end //SW
 			`J_OP:    begin isA=1; isAdd=0; isXor=0; isSubtract=0; end //J
 			`JAL_OP:  begin isA=1; isAdd=0; isXor=0; isSubtract=0; end //JAL
 			`BEQ_OP:  begin isA=0; isAdd=1; isXor=0; isSubtract=1; end //BEQ
@@ -208,19 +208,34 @@ module ALU(
     wire isSLTinv;
     wire SLTval;
 
-    not(overflowInv, overflow);
+    wire bInv;
+    not(bInv, operandB[31]);
+
+    wire aCheck;
+    wire bCheck;
+    wire abCheck;
+
+    and(aCheck, operandA[31], initialResult[31], isSLT);
+    and(bCheck, bInv, initialResult[31], isSLT);
+    and(abCheck, operandA[31], bInv, isSLT);
+
+    or(SLTval, aCheck, bCheck, abCheck);
+
+    // not(overflowInv, overflow);
     not(isSLTinv, isSLT);
-    and(SLTval, initialResult[31], overflowInv, isSLT);
+    // and(SLTval, initialResult[31], overflowInv, isSLT);
 
     generate
         genvar j;
-        for (j=0; j<32; j=j+1)
+        for (j=1; j<32; j=j+1)
         begin
             and(res[j], initialResult[j], isSLTinv);
         end
     endgenerate
 
-    or(res[0], initialResult[0], SLTval);
+    wire sltCheck;
+    and(sltCheck, initialResult[0], isSLTinv);
+    or(res[0], sltCheck, SLTval);
 
 	didOverflow overflowCalc (
 		.overflow (overflow),

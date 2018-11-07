@@ -1,4 +1,3 @@
-`include "CPU.v"
 `include "alu.v"
 `timescale 1 ns / 1 ps
 
@@ -13,9 +12,12 @@ module testALU();
 	wire carryout;
 	wire zero;
 
+
 	ALU alu (operandA, operandB, opcode, funct, zero, res, overflow, carryout);
 
 	initial begin
+        $dumpfile("ALU.vcd");
+        $dumpvars();
 
     	$display("TESTING BASIC GATES");
 
