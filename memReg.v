@@ -2,8 +2,8 @@
 
 module memoryReg
 #(
-    parameter addresswidth  = 9,
-    parameter depth         = 1024,
+    parameter addresswidth  = 12,
+    parameter depth         = 4096,
     parameter width         = 32
 )
 (
