@@ -12,7 +12,7 @@ module CPU (
 );
 //wire declaration
 wire[31:0] pcAfterAdd, pcPlusFour, Da, immediate;
-wire opcode2Inv, opcode3Inv, opcode4Inv, opcode5Inv;
+wire opcode0Inv, opcode1Inv, opcode2Inv, opcode3Inv, opcode4Inv, opcode5Inv;
 
 wire isBranch, isBneOrBeq, zero, wEnable;
 
@@ -29,15 +29,15 @@ end
 wire[25:0] jump;
 wire[31:0] finalJumpValue;
 assign jump = instruction[25:0];
-assign finalJumpValue = {pcPlusFour[31:28], jump, 2'b0};
+assign finalJumpValue = {pcPlusFour[31:26], jump};
 
-wire isJumpSelInv;
+wire isJumpSel;
 not(opcode5Inv, opcode[5]);
-and(isJumpSelInv, opcode5Inv, opcode4Inv, opcode3Inv, opcode2Inv, opcode[1]);
+and(isJumpSel, opcode5Inv, opcode4Inv, opcode3Inv, opcode2Inv, opcode[1]);
 wire[31:0] jumpNextPC;
 mux isJumpMux(
-	.input1(pcAfterAdd),
-	.input0(finalJumpValue),
+	.input0(pcAfterAdd),
+	.input1(finalJumpValue),
 	.out(jumpNextPC),
 	.sel(isJumpSel)
 );
@@ -63,7 +63,7 @@ Adder programCounterAdder(
 
 wire isBranchOrAddSel;
 mux isBranchOrAddMux(
-	.input1(immediate), // has already been extended
+	.input1(immediate + 1'b1), // has already been extended
 	.input0(32'd1),
 	.out(fourOrBranch),
 	.sel(isBranchOrAddSel)
@@ -71,7 +71,7 @@ mux isBranchOrAddMux(
 
 and(isBranchOrAddSel, isBranch, isBneOrBeq);
 
-and(isBranch, opcode[1], opcode[2]); //is true if BNE or BEQ
+and(isBranch, opcode1Inv, opcode[2]); //is true if BNE or BEQ
 wire zeroInv;
 not(zeroInv, zero);
 defparam isBneOrBeqMux.data_width = 1;
@@ -124,10 +124,12 @@ mux #(5) writeRegisterMuxRtOrRd(
 );
 
 wire isJumpandLink;
+not(opcode0Inv, opcode[0]);
+not(opcode1Inv, opcode[1]);
 not(opcode2Inv, opcode[2]);
 not(opcode3Inv, opcode[3]);
 not(opcode4Inv, opcode[4]);
-and(isJumpandLink, opcode[0], opcode[1], opcode2Inv, opcode3Inv, opcode4Inv);
+and(isJumpandLink, opcode[0], opcode[1], opcode2Inv, opcode3Inv, opcode4Inv, opcode5Inv);
 //determines if write address is set my Rt or Rd or is "31" because of the opcode
 mux #(5) writeRegister31Mux(
 	.input0(regWriteRdOrRt),
@@ -139,12 +141,14 @@ mux #(5) writeRegister31Mux(
 //ALU Logic
 
 wire[31:0] DbOrImmediate;
+wire DbOrImmediateSel;
+or(DbOrImmediateSel, opcode[1], opcode[3]);
 
 mux isDbOrImmediateMux(
 	.input0(Db),
 	.input1(immediate),
 	.out(DbOrImmediate),
-	.sel(rTypeOr)
+	.sel(DbOrImmediateSel)
 );
 
 wire[15:0] preExtendedImm;
@@ -178,7 +182,7 @@ memoryReg memory(
 	.clk(clk),
 	.dataOutRW(dataOut),
 	.dataOutRead(instruction),
-	.addressRW(aluResult),
+	.addressRW(aluResult[31:2]),
 	.addressRead(programCounter),
 	.addressWrite(9'b0), //Don't actually need the second write port
 	.writeEnableRW(dataWrite),
