@@ -16,6 +16,7 @@ module testMux();
 		.out(out));
 
 initial begin
+	$display("Starting Mux Tests.");
 
 	a = {`HALFWIDTH'b1111, `HALFWIDTH'b0};
 	b = {`HALFWIDTH'b0, `HALFWIDTH'b1111};;
@@ -30,6 +31,7 @@ initial begin
 		$display("Mux test failed; output != b when sel=1");
 
 	$display("Mux tests finished!");
+	$display();
 
 end // initial
 endmodule // testMux

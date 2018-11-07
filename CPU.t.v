@@ -24,6 +24,7 @@ module cpu_test ();
 
     // Test sequence
     initial begin
+    	$display("Starting CPU tests.");
 
 	// Get command line arguments for memory image(s) and VCD dump file
 	//   http://iverilog.wikia.com/wiki/Simulation

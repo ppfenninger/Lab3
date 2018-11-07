@@ -1,0 +1,23 @@
+# Initialize stack pointer
+addi $sp $zero 0x3ffc
+
+# Initialize values to save and load
+addi $t0 $zero 0x42
+addi $t1 $zero 0x17
+
+# Push two values onto the stack
+addi $sp $sp -8
+sw   $t0 4($sp)
+sw   $t1 0($sp)
+
+# Do a real quick validation of XORI to simulate a function
+addi $t4 $zero 0xAA
+xori $t4 $t4 0xFF #$t4 should change to 55
+
+# Pop values back off into different registers
+lw   $t2 4($sp)
+lw   $t3 0($sp)
+addi $sp $sp 8
+
+end:
+j end #jump trap to halt execution

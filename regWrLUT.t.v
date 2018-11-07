@@ -1,4 +1,3 @@
-`include "CPU.v"
 `include "regWrLUT.v"
 
 module testRegWrLUT();
@@ -13,8 +12,9 @@ module testRegWrLUT();
 		);
 
 	initial begin
-		$dumpfile("LUT.vcd");
-		$dumpvars();
+		// $dumpfile("LUT.vcd");
+		// $dumpvars();
+		$display("Starting RegWrLUT testing.");
 
 		opcode = `LW_OP;
 		funct = 6'b111111;

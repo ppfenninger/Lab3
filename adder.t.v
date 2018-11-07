@@ -8,7 +8,9 @@ module testAdder();
 	wire carryout;
 
 	initial begin
+		$display();
 
+		$display("Starting Adder Tests.");
 		$display("TESTING ADD");
 	    	operandA=32'd7000;operandB=32'd14000; #4000
 	    	if(result != 32'd21000) $display("p + p = p TEST FAILED - result: %d", result);
@@ -43,7 +45,8 @@ module testAdder();
 	    	if(overflow != 0) $display("n + p = n OVERFLOW FAILED");
 	    	if(carryout != 0) $display("n + p = n CARRYOUT FAILED");
 
-		$display("Finished Testing");
+		$display("Finished Adder Testing");
+		$display();
 	end
 
 endmodule // testAdder

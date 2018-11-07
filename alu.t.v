@@ -16,8 +16,9 @@ module testALU();
 	ALU alu (operandA, operandB, opcode, funct, zero, res, overflow, carryout);
 
 	initial begin
-        $dumpfile("ALU.vcd");
-        $dumpvars();
+        // $dumpfile("ALU.vcd");
+        // $dumpvars();
+        $display("Starting ALU tests.");
 
     	$display("TESTING BASIC GATES");
 
@@ -159,6 +160,7 @@ module testALU();
     	if (res != 32'd0) $display("p not < n TEST FAILED");
     	if(zero != 32'd1) $display("ZERO FAILED - was 0 %b   %b ", zero, res);
 
-        $display("Testing Finished");
+        $display("ALU Testing Finished");
+        $display();
 	end
 endmodule // testALU

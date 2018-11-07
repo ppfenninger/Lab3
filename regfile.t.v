@@ -51,6 +51,7 @@ module hw4testbenchharness();
 
   // Test harness asserts 'begintest' for 1000 time steps, starting at time 10
   initial begin
+    $display("Starting Regfile Tests.");
     begintest=0;
     #10;
     begintest=1;
@@ -60,6 +61,7 @@ module hw4testbenchharness();
   // Display test results ('dutpassed' signal) once 'endtest' goes high
   always @(posedge endtest) begin
     $display("Regfile tests passed?: %b", dutpassed);
+    $display();
   end
 
 endmodule
